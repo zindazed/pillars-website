@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "hijabgalleryug"
+  },
+  "targets": {
+    "hijabgalleryug": {
+      "hosting": {
+        "general": [
+          "hijabgalleryug"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
