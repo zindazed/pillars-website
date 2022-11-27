@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -13,6 +13,8 @@ import { CartCounterProvider } from "./components/cartCounter";
 import { AuthProvider } from "./components/auth";
 import CartDetails from "./components/CartDetails";
 import BottomNav from "./components/BottomNav";
+import { db } from "./firebase-config";
+import { resetCount } from "./manager";
 const loading = (
   <div
     className="w-100 d-flex justify-content-center align-items-center"
@@ -23,6 +25,26 @@ const loading = (
 );
 
 export default function App(props) {
+  useEffect(() => {
+    async function resetCountingPages() {
+      let today = new Date().toLocaleString("en-US", {
+        timeZone: "Africa/Kampala",
+      });
+      const todayDate = new Date(today);
+      await db
+        .collection("projectStatus")
+        .doc("hijabGallery")
+        .get()
+        .then((status) => {
+          const countingDate = new Date(status.data().countingDay);
+          if (todayDate.getDate() > countingDate.getDate()) {
+            resetCount();
+          }
+        });
+    }
+    resetCountingPages();
+  }, []);
+
   return (
     <AuthProvider>
       <CartCounterProvider>
